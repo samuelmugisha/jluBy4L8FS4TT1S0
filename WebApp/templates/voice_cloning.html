@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice synthesizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            font-family: Manrope;
+        }
+        svg#L4{
+            width: 100px;
+            height: 30px;
+            margin: 0;
+            display:inline-block;
+        }
+    </style>
+</head>
+
+
+<body>
+    <section class="py-10 bg-gray-50 sm:py-16 lg:py-24">
+        <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="max-w-xl mx-auto text-center">
+                <h2 class="mt-10 text-3xl font-bold leading-tight text-black sm:text-3xl lg:text-4xl">Voice Cloning Application</h2>
+                <p class="mt-8 text-base leading-relaxed text-gray-600">Please upload an audio file and write a text below to synthesize audio</p>
+            </div>
+
+            <form action="/synthesize" class="max-w-xl mx-auto mt-10" method="post" enctype="multipart/form-data">
+				<div>
+					<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="audio_file"><b>Upload a recording</b></label>
+					<div class="relative border-1">
+					<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="audio_file" type="file" name="audio_file">
+					</div>
+					<p class="mt-1 text-sm text-gray-400 dark:text-gray-250" id="file_input_help">MP3 or WAV files.</p><br>
+				</div>
+				
+                <div>
+                    <label class="sr-only" for="clone_text"> Search </label>
+                    <div class="relative border-1">
+                        
+                        <textarea type="text" name="clone_text" maxlength="400" placeholder="Enter your text here..." class="block w-full py-3 pl-4 pr-4 text-base font-normal leading-7 text-gray-900 placeholder-gray-500 bg-white border border-gray-500 rounded-md focus:ring-white focus:border-white focus:ring-offset-2" rows="5"></textarea>
+                    </div>
+                    <div id="html_element" class="mt-5"></div>
+                    <br>
+                </div>
+                <div class="mt-5">
+                  
+                    <button 
+                    type="submit" class="rounded-lg inline-flex items-center justify-center w-full px-4 py-4 text-sm font-bold tracking-widest text-white uppercase transition-all duration-200 bg-gray-900 border border-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white hover:bg-gray-700 ">
+                        <span>Get audio from text</span>
+                        <div class="hidden" id="svg_container">
+                            <svg version="1.1" id="L4"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+                            <circle fill="#fff" stroke="none" cx="6" cy="50" r="6">
+                                <animate
+                                attributeName="opacity"
+                                dur="1s"
+                                values="0;1;0"
+                                repeatCount="indefinite"
+                                begin="0.1"/>    
+                            </circle>
+                            <circle fill="#fff" stroke="none" cx="26" cy="50" r="6">
+                                <animate
+                                attributeName="opacity"
+                                dur="1s"
+                                values="0;1;0"
+                                repeatCount="indefinite" 
+                                begin="0.2"/>       
+                            </circle>
+                            <circle fill="#fff" stroke="none" cx="46" cy="50" r="6">
+                                <animate
+                                attributeName="opacity"
+                                dur="1s"
+                                values="0;1;0"
+                                repeatCount="indefinite" 
+                                begin="0.3"/>     
+                            </circle>
+                            </svg>
+                        </div>
+                       
+                    </button>
+                </div>
+            </form><br>
+			<div class="max-w-xl mx-auto text-center">
+				<div class="block mb-2 text-left text-sm font-medium text-gray-900 dark:text-white">
+					{{ output | safe}}
+					<p color:red>{{error}}</p>
+				</div>
+			</div>
+			
+        </div>
+    </section>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</body>
+</html>

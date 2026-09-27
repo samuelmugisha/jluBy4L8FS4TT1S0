@@ -1,0 +1,38 @@
+# Environment for the notebooks and scripts (tested with Python 3.11 on macOS x86_64).
+# The Flask web app has its own WebApp/requirements.txt.
+
+# Fake audio detection
+tensorflow==2.16.2
+librosa==0.10.2.post1
+numba==0.60.0
+llvmlite==0.43.0
+resampy==0.4.3
+numpy==1.26.4
+pandas
+scikit-learn
+matplotlib
+soundfile
+
+# Voice cloning (SV2TTS code in WebApp/)
+torch==2.2.2
+inflect
+unidecode
+webrtcvad-wheels
+wavio
+moviepy==1.0.3
+
+# WER evaluation
+SpeechRecognition
+jiwer
+spacy==3.7.5
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0-py3-none-any.whl
+
+# Speaker classification
+torchaudio==2.2.2
+speechbrain==1.0.3
+huggingface_hub==0.25.2
+
+# Notebooks and data download
+ipykernel
+nbconvert
+kaggle
