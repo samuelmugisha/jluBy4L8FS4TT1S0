@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1610" height="550" viewBox="0 0 1610 550" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .title { font-size: 30px; font-weight: bold; fill: #333; }
+    .head { font-size: 20px; font-weight: bold; fill: #1a1a1a; }
+    .body { font-size: 17px; fill: #222; }
+    .src { font-size: 14px; fill: #666; font-family: Menlo, Consolas, monospace; }
+    .arrow { stroke: #111; stroke-width: 2.5; fill: none; }
+  </style>
+  <defs>
+    <marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#111"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="1608" height="548" rx="4" fill="#fff" stroke="#888" stroke-width="2"/>
+  <polygon points="1,1 1609,1 1609,40 1584,70 1,70" fill="#f3f3f3" stroke="#888" stroke-width="2"/>
+  <text class="title" x="805" y="46" text-anchor="middle">PHASE-2 – CLONE EVALUATION AND DATASET CONSOLIDATION</text>
+
+  <!-- 1. Enrollment -->
+  <g transform="translate(40,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#82b366" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+    <text class="head" x="172" y="40" text-anchor="middle">1. SPEAKER ENROLLMENT</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Resample to 16 kHz and trim</text>
+      <text x="36" y="123">leading/trailing silence</text>
+      <circle cx="22" cy="150" r="3.5"/><text x="36" y="156">Hold out each speaker's</text>
+      <text x="36" y="179">longest SX/SI sentence</text>
+      <circle cx="22" cy="206" r="3.5"/><text x="36" y="212">Voiceprint: mean ECAPA-TDNN</text>
+      <text x="36" y="235">embedding of the other 9</text>
+      <text x="36" y="258">recordings</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">speaker_classification.ipynb</text>
+  </g>
+
+  <!-- 2. Speaker identification -->
+  <g transform="translate(435,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#d6b656" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text class="head" x="172" y="28" text-anchor="middle">2. SPEAKER</text>
+    <text class="head" x="172" y="52" text-anchor="middle">IDENTIFICATION</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Match each clone to the</text>
+      <text x="36" y="123">closest of 300 voiceprints</text>
+      <text x="36" y="146">(cosine similarity)</text>
+      <circle cx="22" cy="173" r="3.5"/><text x="36" y="179">Top-1 30.7%, top-5 62.7%</text>
+      <text x="36" y="202">(chance: 0.33%)</text>
+      <circle cx="22" cy="229" r="3.5"/><text x="36" y="235">Correct gender: 99.3%</text>
+      <circle cx="22" cy="262" r="3.5"/><text x="36" y="268">Ceiling: held-out real clip</text>
+      <text x="36" y="291">scores 100% top-1</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">speaker_classification.ipynb</text>
+  </g>
+
+  <!-- 3. Visualization -->
+  <g transform="translate(830,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#6c8ebf" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+    <text class="head" x="172" y="28" text-anchor="middle">3. GRAPHICAL</text>
+    <text class="head" x="172" y="52" text-anchor="middle">VISUALIZATION</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Waveform of a cloned sample</text>
+      <circle cx="22" cy="127" r="3.5"/><text x="36" y="133">MFCC spectrogram of the</text>
+      <text x="36" y="156">same clip</text>
+      <circle cx="22" cy="183" r="3.5"/><text x="36" y="189">Cosine similarity histograms:</text>
+      <text x="36" y="212">true speaker vs impostors,</text>
+      <text x="36" y="235">for clones and real clips</text>
+    </g>
+    <text class="src" x="172" y="355" text-anchor="middle">voice_cloning_part1.ipynb</text>
+    <text class="src" x="172" y="378" text-anchor="middle">speaker_classification.ipynb</text>
+  </g>
+
+  <!-- 4. Data consolidation -->
+  <g transform="translate(1225,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#b85450" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+    <text class="head" x="172" y="40" text-anchor="middle">4. DATA CONSOLIDATION</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Pair each clone with a real</text>
+      <text x="36" y="123">TIMIT clip of the same speaker</text>
+      <circle cx="22" cy="150" r="3.5"/><text x="36" y="156">Real clip: longest SX/SI</text>
+      <text x="36" y="179">sentence (≈ 11+ word prompts)</text>
+      <circle cx="22" cy="206" r="3.5"/><text x="36" y="212">Trim silence identically</text>
+      <text x="36" y="235">(top_db=30), removing the</text>
+      <text x="36" y="258">clones' 1s end padding</text>
+      <circle cx="22" cy="285" r="3.5"/><text x="36" y="291">Output: data/fair/ with</text>
+      <text x="36" y="314">300 real + 300 cloned clips</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">prepare_fair_test.py</text>
+  </g>
+
+  <line class="arrow" x1="387" y1="310" x2="431" y2="310" marker-end="url(#tip)"/>
+  <line class="arrow" x1="782" y1="310" x2="826" y2="310" marker-end="url(#tip)"/>
+  <line class="arrow" x1="1177" y1="310" x2="1221" y2="310" marker-end="url(#tip)"/>
+</svg>

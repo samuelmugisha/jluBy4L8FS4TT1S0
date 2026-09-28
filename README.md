@@ -17,7 +17,11 @@ A system that clones a speaker's voice from a few seconds of their speech, then 
 
 ## Approach
 
+The project runs in three phases: clone TIMIT voices, check how well the clones match their speakers and build a matched real-vs-cloned dataset, then train a detector on that dataset. Each box in the diagrams below names the file that implements that step.
+
 ### Voice cloning
+
+![Phase 1: voice cloning system](images/phase1_voice_cloning.svg)
 
 Voice cloning uses [SV2TTS](https://arxiv.org/abs/1806.04558) (Transfer Learning from Speaker Verification to Multispeaker Text-To-Speech Synthesis), via the [Real-Time-Voice-Cloning](https://github.com/CorentinJ/Real-Time-Voice-Cloning) implementation bundled in `WebApp/`:
 
@@ -42,6 +46,8 @@ Using setup 2.1, 300 TIMIT speakers were cloned, each reading a different TIMIT 
 
 ### Speaker classification accuracy
 
+![Phase 2: clone evaluation and dataset consolidation](images/phase2_clone_evaluation.svg)
+
 Each of the 300 clones is compared against voiceprints of all 300 real speakers. A voiceprint is the average embedding of 9 of the speaker's real recordings. The clone counts as correct if its closest voiceprint is the speaker it was cloned from. The judge is **ECAPA-TDNN** (SpeechBrain, trained on VoxCeleb), which is independent of the cloning system. Chance is 1/300 = 0.33%.
 
 | Test audio | Top-1 accuracy | Top-5 accuracy | Gender correct | Cosine similarity to true speaker |
@@ -52,6 +58,8 @@ Each of the 300 clones is compared against voiceprints of all 300 real speakers.
 The clones are attributed to the correct speaker 92× more often than chance and almost always to the correct gender. Their similarity to the true speaker (0.35) is far below that of a genuine recording (0.85), though. The clones capture gender and general voice character, not an individual's voice. Scoring with the SV2TTS encoder instead gives 51.0% top-1, but that encoder is what conditioned the cloning, so it grades its own output. The independent figure is the one to cite.
 
 ### Fake audio detection
+
+![Phase 3: fake audio detection, fair test](images/phase3_fake_audio_detection.svg)
 
 Each recording is summarised by 193 features, averaged over time: 40 MFCCs, 12 chroma, 128 mel bands, 7 spectral contrast and 6 tonnetz. Each feature group is standardised per recording. A small neural network (two dense layers of 50 units, sigmoid output) is trained with early stopping on validation loss.
 
@@ -96,6 +104,7 @@ The detector still reaches an F1 of about 0.97. Its mistakes are mostly clones p
 | `prepare_part2_data.py` | Builds LibriSpeech real clips plus macOS `say` fakes (an early stand-in dataset, before real clones existed) |
 | `prepare_fair_test.py` | Builds the speaker-matched dataset for the fair test |
 | `WebApp/` | Flask app for cloning and detection, with the SV2TTS code |
+| `images/` | Pipeline diagrams used in this README |
 
 The TIMIT recordings embedded in the notebooks' outputs have been removed, because TIMIT is licensed.
 

@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1610" height="550" viewBox="0 0 1610 550" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .title { font-size: 30px; font-weight: bold; fill: #333; }
+    .head { font-size: 20px; font-weight: bold; fill: #1a1a1a; }
+    .body { font-size: 17px; fill: #222; }
+    .src { font-size: 14px; fill: #666; font-family: Menlo, Consolas, monospace; }
+    .arrow { stroke: #111; stroke-width: 2.5; fill: none; }
+  </style>
+  <defs>
+    <marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#111"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="1608" height="548" rx="4" fill="#fff" stroke="#888" stroke-width="2"/>
+  <polygon points="1,1 1609,1 1609,40 1584,70 1,70" fill="#f3f3f3" stroke="#888" stroke-width="2"/>
+  <text class="title" x="805" y="46" text-anchor="middle">PHASE-1 – VOICE CLONING SYSTEM (SV2TTS)</text>
+
+  <!-- 1. Load TIMIT -->
+  <g transform="translate(40,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#82b366" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+    <text class="head" x="172" y="40" text-anchor="middle">1. LOAD TIMIT</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Read the Kaggle copy of TIMIT</text>
+      <text x="36" y="123">(TRAIN and TEST splits)</text>
+      <circle cx="22" cy="150" r="3.5"/><text x="36" y="156">Group 6,300 recordings by</text>
+      <text x="36" y="179">speaker: 630 speakers × 10</text>
+      <circle cx="22" cy="206" r="3.5"/><text x="36" y="212">Parse PROMPTS.TXT and keep</text>
+      <text x="36" y="235">the 720 prompts of 11+ words</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">voice_cloning_part1.ipynb</text>
+  </g>
+
+  <!-- 2. Load SV2TTS -->
+  <g transform="translate(435,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#d6b656" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text class="head" x="172" y="40" text-anchor="middle">2. LOAD SV2TTS MODELS</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Encoder: a few seconds of</text>
+      <text x="36" y="123">audio → speaker embedding</text>
+      <circle cx="22" cy="150" r="3.5"/><text x="36" y="156">Synthesizer: text + embedding</text>
+      <text x="36" y="179">→ mel spectrogram</text>
+      <circle cx="22" cy="206" r="3.5"/><text x="36" y="212">WaveRNN vocoder: mel</text>
+      <text x="36" y="235">spectrogram → waveform</text>
+      <circle cx="22" cy="262" r="3.5"/><text x="36" y="268">Pretrained, loaded once;</text>
+      <text x="36" y="291">not fine-tuned on TIMIT</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">functions.py</text>
+  </g>
+
+  <!-- 3. Cloning experiments -->
+  <g transform="translate(830,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#b85450" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+    <text class="head" x="172" y="40" text-anchor="middle">3. CLONING EXPERIMENTS</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">4 setups × 3 speakers:</text>
+      <text x="36" y="123">1 clip (~4s) or 10 merged</text>
+      <text x="36" y="146">(~30s) × 12- or 37-word text</text>
+      <circle cx="22" cy="173" r="3.5"/><text x="36" y="179">Transcribe each clone with</text>
+      <text x="36" y="202">Google Speech Recognition</text>
+      <circle cx="22" cy="229" r="3.5"/><text x="36" y="235">Score Word Error Rate (WER)</text>
+      <circle cx="22" cy="262" r="3.5"/><text x="36" y="268">Best: 1 clip + short text,</text>
+      <text x="36" y="291">8.3% WER</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">voice_cloning_part1.ipynb</text>
+  </g>
+
+  <!-- 4. Generate clones -->
+  <g transform="translate(1225,110)">
+    <rect width="345" height="400" fill="#fff" stroke="#6c8ebf" stroke-width="2"/>
+    <polygon points="0,0 345,0 345,38 325,64 0,64" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+    <text class="head" x="172" y="28" text-anchor="middle">4. GENERATE</text>
+    <text class="head" x="172" y="52" text-anchor="middle">VOICE CLONES</text>
+    <g class="body">
+      <circle cx="22" cy="94" r="3.5"/><text x="36" y="100">Merge each speaker's 10</text>
+      <text x="36" y="123">recordings into one ~30s</text>
+      <text x="36" y="146">reference clip</text>
+      <circle cx="22" cy="173" r="3.5"/><text x="36" y="179">Clone 300 speakers, each</text>
+      <text x="36" y="202">reading a different prompt</text>
+      <circle cx="22" cy="229" r="3.5"/><text x="36" y="235">Resumable, parallel workers</text>
+      <text x="36" y="258">(~70s per clone on CPU)</text>
+      <circle cx="22" cy="285" r="3.5"/><text x="36" y="291">Output: data/cloned_audio/</text>
+    </g>
+    <text class="src" x="172" y="378" text-anchor="middle">clone_speakers.py</text>
+  </g>
+
+  <line class="arrow" x1="387" y1="310" x2="431" y2="310" marker-end="url(#tip)"/>
+  <line class="arrow" x1="782" y1="310" x2="826" y2="310" marker-end="url(#tip)"/>
+  <line class="arrow" x1="1177" y1="310" x2="1221" y2="310" marker-end="url(#tip)"/>
+</svg>
