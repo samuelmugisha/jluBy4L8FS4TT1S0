@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.9-bookworm
+FROM python:3.11-bookworm
 
 LABEL maintainer="samuelmugisha <dcgroup205@gmail.com>"
 
@@ -15,4 +15,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["flask", "run","--host","0.0.0.0","--port","5000"]
+CMD ["flask", "--app", "app", "run", "--host", "0.0.0.0", "--port", "5000"]

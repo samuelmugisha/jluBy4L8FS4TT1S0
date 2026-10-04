@@ -7,8 +7,7 @@ A system that clones a speaker's voice from a few seconds of their speech, then 
 ## Data
 
 - [**TIMIT**](https://github.com/philipperemy/timit): 6,300 read sentences, 10 from each of 630 US English speakers across 8 dialect regions. Used as the source voices and prompts for cloning, and as matched real speech in the fair detection test.
-- [**Common Voice**](https://commonvoice.mozilla.org/en/datasets): crowd-sourced read speech from Mozilla. Used as the real (positive) class in the original detection experiment.
-- [**LibriSpeech dev-clean**](https://www.openslr.org/12): read audiobook speech. Used as a stand-in for Common Voice when reproducing the detection experiment.
+- [**LibriSpeech dev-clean**](https://www.openslr.org/12): read audiobook speech. Used as the real class when reproducing the detection experiment.
 
 ## Success metrics
 
@@ -33,14 +32,14 @@ The three models are used **pretrained**. The encoder was trained on LibriSpeech
 
 Four setups were compared, each on 3 speakers:
 
-| Setup | Reference audio | Text | WER (this run) | WER (original run) |
-| --- | --- | --- | --- | --- |
-| 1.1 | One TIMIT sentence (~4s) | Short (12 words) | **8.3%** | 16.7% |
-| 1.2 | One TIMIT sentence | Long (37 words) | 25.2% | 58.6% |
-| 2.1 | All 10 of the speaker's sentences merged (~30s) | Short | 16.7% | 16.7% |
-| 2.2 | All 10 sentences merged | Long | 55.0% | 44.1% |
+| Setup | Reference audio | Text | WER |
+| --- | --- | --- | --- |
+| 1.1 | One TIMIT sentence (~4s) | Short (12 words) | **8.3%** |
+| 1.2 | One TIMIT sentence | Long (37 words) | 25.2% |
+| 2.1 | All 10 of the speaker's sentences merged (~30s) | Short | 16.7% |
+| 2.2 | All 10 sentences merged | Long | 55.0% |
 
-The WER scoring doesn't strip punctuation, so 8.3% on the 12-word text is one "error" caused by a comma: the transcription in 1.1 was otherwise word-perfect. Long texts are cloned much less reliably. The cloned speech tends to drift off partway through. The original run chose setup 2.1 to generate the detection dataset. This run doesn't show 2.1 beating 1.1, but with 3 clips per setup the differences are within noise.
+The WER scoring doesn't strip punctuation, so 8.3% on the 12-word text is one "error" caused by a comma: the transcription in 1.1 was otherwise word-perfect. Long texts are cloned much less reliably. The cloned speech tends to drift off partway through. Setup 2.1 was used to generate the detection dataset. These results don't show 2.1 beating 1.1, but with 3 clips per setup the differences are within noise.
 
 Using setup 2.1, 300 TIMIT speakers were cloned, each reading a different TIMIT prompt of 11+ words (`clone_speakers.py`).
 
@@ -65,12 +64,10 @@ Each recording is summarised by 193 features, averaged over time: 40 MFCCs, 12 c
 
 | Experiment | Real audio | Fake audio | Result |
 | --- | --- | --- | --- |
-| Original run | 670 Common Voice clips | 630 SV2TTS clones | Test accuracy 99.2%, F1 0.99 (130 clips) |
-| Original run, external fakes | ~3,000 Common Voice clips | ~3,000 Blizzard Challenge TTS clips | Test accuracy 99.6%, F1 1.00 (913 clips) |
 | Reproduction (`fake_audio_detection_part2.ipynb`) | 300 LibriSpeech clips | 300 SV2TTS clones | Test F1 1.00 (60 clips), validation accuracy 90.7% |
 | **Fair test** (`fake_audio_detection_fair.ipynb`) | 300 TIMIT clips from the **same speakers** as the clones | 300 SV2TTS clones | **F1 0.967 ± 0.025** (5-fold cross-validation, 20 errors in 600) |
 
-The near-perfect scores in the first three rows overstate the detector. The classifier can separate the classes using shortcuts:
+The near-perfect score in the first row overstates the detector. The classifier can separate the classes using shortcuts:
 - Every clone ends with 1 second of silence added by the synthesis code.
 - Real and fake audio come from different corpora and recording conditions.
 - The splits aren't grouped by speaker.
@@ -94,17 +91,17 @@ The detector still reaches an F1 of about 0.97. Its mistakes are mostly clones p
 
 | File | Purpose |
 | --- | --- |
-| `voice_cloning_and_fake_audio_detection.ipynb` | Original end-to-end notebook, kept for reference. It doesn't run as-is: it uses Windows paths and older library APIs. |
-| `voice_cloning_part1.ipynb` | Voice cloning experiments and WER (runnable) |
+| `voice_cloning_part1.ipynb` | Voice cloning experiments and WER |
 | `speaker_classification.ipynb` | Speaker classification accuracy of the clones |
 | `fake_audio_detection_part2.ipynb` | Detection experiment reproduced with clones vs LibriSpeech |
 | `fake_audio_detection_fair.ipynb` | Fair detection test with speaker-matched data and grouped cross-validation |
 | `functions.py` | Cloning, WER, feature extraction and evaluation helpers |
 | `clone_speakers.py` | Batch-clones TIMIT speakers (resumable, can run as parallel workers) |
-| `prepare_part2_data.py` | Builds LibriSpeech real clips plus macOS `say` fakes (an early stand-in dataset, before real clones existed) |
+| `prepare_part2_data.py` | Builds the LibriSpeech real clips for the Part 2 detection experiment |
 | `prepare_fair_test.py` | Builds the speaker-matched dataset for the fair test |
-| `WebApp/` | Flask app for cloning and detection, with the SV2TTS code |
-| `images/` | Pipeline diagrams used in this README |
+| `train_detector.py` | Trains the web app's detector on the fair dataset and saves its cross-validated scores |
+| `WebApp/` | Flask app for cloning and detection, with the SV2TTS inference code and the trained detector |
+| `images/` | Pipeline diagrams and web app screenshots used in this README |
 
 The TIMIT recordings embedded in the notebooks' outputs have been removed, because TIMIT is licensed.
 
@@ -123,22 +120,30 @@ The TIMIT recordings embedded in the notebooks' outputs have been removed, becau
    - `python clone_speakers.py --n 300` to clone 300 speakers. This takes about 70 seconds per clone on a laptop CPU. Pass `--worker i --workers k` to run k processes in parallel.
    - `speaker_classification.ipynb`
    - `python prepare_fair_test.py`, then `fake_audio_detection_fair.ipynb`
+   - `python train_detector.py` to train the web app's detector
    - For the LibriSpeech comparison: download and extract [dev-clean](https://www.openslr.org/12) to `.cache/LibriSpeech/dev-clean`, run `python prepare_part2_data.py`, then `fake_audio_detection_part2.ipynb`
 
 ## Web app
 
 `WebApp/` contains a Flask app with two features:
 - **Clone a voice:** upload a recording and type any text to hear it in that voice.
-- **Detect fakes:** upload a recording to classify it as natural or synthetic, using the trained classifier in `WebApp/models/classifier.h5`.
+- **Detect fakes:** upload a recording to find out whether it's a real voice or a clone. The page shows the prediction with its confidence, and the detector's F1 score, accuracy, precision and recall.
 
+The detector is the fair-test model, trained on all 300 speaker-matched pairs by `train_detector.py` (`WebApp/models/detector_fair.keras`). Uploads are trimmed of silence the same way as the training data. Its scores come from 5-fold speaker-grouped cross-validation: **F1 0.973 ± 0.016**, accuracy 97.3%, with 9 clones passed as real and 7 real clips flagged as clones out of 600.
+
+| Real voice (a TIMIT recording) | Cloned voice (an SV2TTS clone) |
+| --- | --- |
+| ![Web app classifying a real TIMIT recording as a real voice](images/webapp_real_detection.png) | ![Web app classifying an SV2TTS clone as a cloned voice](images/webapp_fake_detection.png) |
+
+Run it from the project environment:
 ```bash
+python train_detector.py          # needs data/fair from prepare_fair_test.py
 cd WebApp
-pip install -r requirements.txt   # the app's own, older pinned environment
-# place the pretrained SV2TTS models in WebApp/saved_models/default/ (see above)
-python app.py                     # then open http://localhost:5000
+# for voice cloning, place the pretrained SV2TTS models in WebApp/saved_models/default/ (see above)
+../.venv/bin/python -m flask --app app run   # then open http://localhost:5000
 ```
 
-A `Dockerfile` is included. Build it from `WebApp/` after placing the models:
+A `Dockerfile` is included, with its own `WebApp/requirements.txt`. Build it from `WebApp/` after placing the models:
 ```bash
 docker build -t vcfad .
 docker run -p 5000:5000 vcfad
@@ -148,4 +153,4 @@ docker run -p 5000:5000 vcfad
 
 - SV2TTS implementation and pretrained models: [CorentinJ/Real-Time-Voice-Cloning](https://github.com/CorentinJ/Real-Time-Voice-Cloning)
 - Speaker recognition model: [SpeechBrain ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)
-- The original notebook, web app and detection experiments come from [sudarshanng7/Voice-Cloning-and-Fake-Audio-Detection](https://github.com/sudarshanng7/Voice-Cloning-and-Fake-Audio-Detection)
+- This project builds on [sudarshanng7/Voice-Cloning-and-Fake-Audio-Detection](https://github.com/sudarshanng7/Voice-Cloning-and-Fake-Audio-Detection), which provided the original notebook, web app and detection experiments

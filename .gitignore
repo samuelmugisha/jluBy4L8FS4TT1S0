@@ -14,3 +14,6 @@ cloned_data/
 
 # Pretrained SV2TTS models (download from https://huggingface.co/CorentinJ/SV2TTS)
 WebApp/saved_models/
+
+# Web app uploads and output
+WebApp/static/

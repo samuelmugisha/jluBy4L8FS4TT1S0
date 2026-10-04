@@ -74,11 +74,35 @@
                     </button>
                 </div>
             </form><br>
-			<div class="max-w-xl mx-auto text-center">
-				<div class="block mb-2 text-left text-sm font-medium text-gray-900 dark:text-white">
-					{{ classes }}
-					<p color:red>{{error}}</p>
+			<div class="max-w-xl mx-auto">
+				{% if error %}
+				<p class="text-sm text-red-600">{{ error }}</p>
+				{% endif %}
+				{% if classes %}
+				<div class="p-6 rounded-lg border {{ 'border-green-300 bg-green-50' if classes == 'Real' else 'border-red-300 bg-red-50' }}">
+					<p class="text-sm text-gray-500">{{ filename }}</p>
+					<p class="mt-1 text-3xl font-extrabold {{ 'text-green-700' if classes == 'Real' else 'text-red-700' }}">
+						{{ 'Real voice' if classes == 'Real' else 'Cloned voice' }}
+					</p>
+					<p class="mt-1 text-sm text-gray-700">Confidence: <b>{{ '%.1f' % (confidence * 100) }}%</b></p>
 				</div>
+				{% endif %}
+				{% if metrics %}
+				<div class="mt-6 p-6 rounded-lg border border-gray-200 bg-white">
+					<p class="text-sm font-bold text-gray-900">Detector performance</p>
+					<div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+						<div><p class="text-2xl font-extrabold">{{ '%.3f' % metrics.f1 }}</p><p class="text-xs text-gray-500">F1 score (± {{ '%.3f' % metrics.f1_std }})</p></div>
+						<div><p class="text-2xl font-extrabold">{{ '%.1f' % (metrics.accuracy * 100) }}%</p><p class="text-xs text-gray-500">Accuracy</p></div>
+						<div><p class="text-2xl font-extrabold">{{ '%.3f' % metrics.precision }}</p><p class="text-xs text-gray-500">Precision</p></div>
+						<div><p class="text-2xl font-extrabold">{{ '%.3f' % metrics.recall }}</p><p class="text-xs text-gray-500">Recall</p></div>
+					</div>
+					<p class="mt-4 text-xs text-gray-500">
+						{{ metrics.evaluation }} on {{ metrics.n_files }} clips ({{ metrics.dataset }}); "Real" is the positive class.
+						Errors: {{ metrics.confusion.clone_as_real }} clones passed as real, {{ metrics.confusion.real_as_clone }} real clips flagged as clones.
+						The detector has only seen SV2TTS clones and may not generalise to other cloning systems.
+					</p>
+				</div>
+				{% endif %}
 			</div>
 			
         </div>

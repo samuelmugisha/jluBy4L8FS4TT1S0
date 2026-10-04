@@ -1,0 +1,17 @@
+{
+  "dataset": "300 TIMIT speakers: one real recording and one SV2TTS clone each",
+  "evaluation": "5-fold cross-validation grouped by speaker",
+  "positive_class": "Real",
+  "f1": 0.9734573122399184,
+  "f1_std": 0.015879521225063878,
+  "accuracy": 0.9733333333333334,
+  "precision": 0.9701986754966887,
+  "recall": 0.9766666666666667,
+  "confusion": {
+    "real_as_real": 293,
+    "real_as_clone": 7,
+    "clone_as_clone": 291,
+    "clone_as_real": 9
+  },
+  "n_files": 600
+}
