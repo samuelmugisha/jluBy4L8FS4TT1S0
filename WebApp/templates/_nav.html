@@ -1,0 +1,15 @@
+{# Shared navigation bar; the current page's link is highlighted #}
+{% set links = [('home', 'Home', ['home']),
+                ('voice_cloning', 'Clone a Voice', ['voice_cloning', 'synthesize']),
+                ('fad', 'Fake Audio Detection', ['fad', 'fake_audio'])] %}
+<nav class="bg-white border-b border-gray-200">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-2 py-4">
+        <a href="{{ url_for('home') }}" class="text-base font-extrabold text-gray-900">Voice Cloning &amp; Fake Audio Detection</a>
+        <div class="flex flex-wrap gap-1">
+            {% for endpoint, label, active in links %}
+            <a href="{{ url_for(endpoint) }}"
+               class="px-3 py-2 rounded-lg text-sm font-bold {{ 'bg-gray-900 text-white' if request.endpoint in active else 'text-gray-700 hover:bg-gray-100' }}">{{ label }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</nav>

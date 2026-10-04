@@ -125,9 +125,17 @@ The TIMIT recordings embedded in the notebooks' outputs have been removed, becau
 
 ## Web app
 
-`WebApp/` contains a Flask app with two features:
-- **Clone a voice:** upload a recording and type any text to hear it in that voice.
-- **Detect fakes:** upload a recording to find out whether it's a real voice or a clone. The page shows the prediction with its confidence, and the detector's F1 score, accuracy, precision and recall.
+`WebApp/` contains a Flask app with three pages, linked by a navigation bar at the top of each page:
+
+| Page | Address | What it does |
+| --- | --- | --- |
+| Home | http://localhost:5000/ | Links to the two tools |
+| Clone a Voice | http://localhost:5000/voice_cloning | Upload a recording and type any text to hear it in that voice. Needs the pretrained SV2TTS models |
+| Fake Audio Detection | http://localhost:5000/fake_audio_detection | Upload a recording to find out whether it's a real voice or a clone. Shows the prediction with its confidence, and the detector's F1 score, accuracy, precision and recall |
+
+| Home | Clone a Voice |
+| --- | --- |
+| ![Web app home page with links to voice cloning and fake audio detection](images/webapp_home.png) | ![Voice cloning page showing the typed text and a player for the cloned audio](images/webapp_voice_cloning.png) |
 
 The detector is the fair-test model, trained on all 300 speaker-matched pairs by `train_detector.py` (`WebApp/models/detector_fair.keras`). Uploads are trimmed of silence the same way as the training data. Its scores come from 5-fold speaker-grouped cross-validation: **F1 0.973 ± 0.016**, accuracy 97.3%, with 9 clones passed as real and 7 real clips flagged as clones out of 600.
 
@@ -140,8 +148,9 @@ Run it from the project environment:
 python train_detector.py          # needs data/fair from prepare_fair_test.py
 cd WebApp
 # for voice cloning, place the pretrained SV2TTS models in WebApp/saved_models/default/ (see above)
-../.venv/bin/python -m flask --app app run   # then open http://localhost:5000
+../.venv/bin/python -m flask --app app run
 ```
+Then open http://localhost:5000 and use the navigation bar to move between pages. To use another port, add `--port 5050` and change the addresses above to match.
 
 A `Dockerfile` is included, with its own `WebApp/requirements.txt`. Build it from `WebApp/` after placing the models:
 ```bash

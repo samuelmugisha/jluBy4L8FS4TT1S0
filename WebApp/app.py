@@ -3,6 +3,7 @@ import os
 import json
 import tempfile
 import soundfile as sf
+from markupsafe import escape
 from werkzeug.utils import secure_filename
 from tensorflow.keras.models import load_model
 import librosa
@@ -39,10 +40,10 @@ def add_header(response):
 
 def htmloader(text,inputaudio,outputaudio):
     x = ""
-    x+="<b>Utterance: </b><p>"+text+"</p><br>"
+    x+="<b>Utterance: </b><p>"+str(escape(text))+"</p><br>"
     x+="<b>Cloned Audio:</b><br>"
     x+="<audio controls>"
-    x+="  <source src='"+str(outputaudio)+"' type='audio/wav'>"
+    x+="  <source src='/"+str(outputaudio)+"' type='audio/wav'>"
     x+="</audio><br>"
     return x
 
