@@ -162,4 +162,4 @@ docker run -p 5000:5000 vcfad
 
 - SV2TTS implementation and pretrained models: [CorentinJ/Real-Time-Voice-Cloning](https://github.com/CorentinJ/Real-Time-Voice-Cloning)
 - Speaker recognition model: [SpeechBrain ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)
-- This project builds on [sudarshanng7/Voice-Cloning-and-Fake-Audio-Detection](https://github.com/sudarshanng7/Voice-Cloning-and-Fake-Audio-Detection), which provided the original notebook, web app and detection experiments
+
