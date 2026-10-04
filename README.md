@@ -2,7 +2,6 @@
 
 A system that clones a speaker's voice from a few seconds of their speech, then trains a classifier to tell natural speech from cloned speech.
 
-**Author:** samuelmugisha ([dcgroup205@gmail.com](mailto:dcgroup205@gmail.com))
 
 ## Data
 
@@ -162,4 +161,7 @@ docker run -p 5000:5000 vcfad
 
 - SV2TTS implementation and pretrained models: [CorentinJ/Real-Time-Voice-Cloning](https://github.com/CorentinJ/Real-Time-Voice-Cloning)
 - Speaker recognition model: [SpeechBrain ECAPA-TDNN](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)
+
+**Author:** samuelmugisha ([dcgroup205@gmail.com](mailto:dcgroup205@gmail.com))
+
 
